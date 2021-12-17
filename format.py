@@ -1,3 +1,5 @@
+from typing import List
+
 
 def canvas(width: int, height: int) -> str:
     return '\n'.join(height * [width * ' '])
@@ -8,7 +10,7 @@ def border(text: str) -> str :
 def pad_block(text: str, left: int, top: int, right: int, bottom: int) :
     return top * '\n' + '\n'.join([left * " " + line + right * " " for line in text.split('\n')]) + bottom * '\n'
 
-def as_table(size: list[int], data: list[list[any]]) -> str:
+def as_table(size: List[int], data: List[List[any]]) -> str:
     output = ''
     for row in data :
         for width in size :
