@@ -15,7 +15,7 @@ class Packages(Source):
         return "Nuget Packages"
 
     def period(self) :
-        return 15
+        return 10
 
     def update(self) :
         self._pakages = { k: self._get_package(k) or v for k, v in self._pakages.items()}
