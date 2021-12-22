@@ -1,5 +1,6 @@
-from typing import Tuple
+from typing import Tuple, Union
 from requests import get
+from requests.models import Response
 from source import Source
 from dateutil import parser
 from format import as_table
@@ -15,7 +16,7 @@ class Packages(Source):
         return "Nuget Packages"
 
     def period(self) :
-        return 10
+        return 15
 
     def update(self) :
         self._pakages = { k: self._get_package(k) or v for k, v in self._pakages.items()}
@@ -30,12 +31,18 @@ class Packages(Source):
         endpoint = f'https://api.nuget.org/v3/registration5-semver1/{name}/index.json'
 
         response = get(endpoint)
-        if (response.status_code != 200) :
+        if (response is None or response.status_code != 200) :
             return None
         
         latestPackage = response.json()['items'][0]['items'][-1]['catalogEntry']
 
         return [latestPackage['id'], latestPackage['published'], latestPackage['version']]
+
+    def _safe_get(endpoint: str) -> Union[Response, None] :
+        try :
+            return get(endpoint)
+        except :
+            return None
 
     def _parse_row(self, row) :
         published = parser.parse(row[1])
