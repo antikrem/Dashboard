@@ -29,15 +29,11 @@ class Storage(Source) :
         
         self._spaces = {
             self._directory_name(subDirectory) : self._get_size(path.join(self._directory, subDirectory)) 
-            for subDirectory in self._directories if self._is_valid_directory(subDirectory)
+            for subDirectory in self._directories
         }
 
     def _directory_name(self, subDirectory: str) :
-        alias = self._alias[subDirectory] if self._alias is not None and subDirectory in self._alias else subDirectory
-        return alias
-
-    def _is_valid_directory(self, subDirectory: str) -> bool :
-        return subDirectory != 'lost+found' and path.isdir(path.join(self._directory, subDirectory))
+        return self._alias[subDirectory] if self._alias is not None and subDirectory in self._alias else subDirectory
 
     def _get_size(self, path: str) -> int :
         try:
@@ -60,4 +56,4 @@ class Storage(Source) :
     def _make_row(self, name: str, space: float, count: int) :
         indent = (name.count('/') + name.count('\\')) * "  "
         ammendedName = split(r'\/|\\', name)[-1]
-        return [indent + ammendedName, indent + format(space / self._total,'.2%'), format_bytes(space), str(count)]
+        return [indent + ammendedName, indent + format(space / self._total,'.2%'), indent + format_bytes(space), indent + str(count)]
