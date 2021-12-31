@@ -1,7 +1,6 @@
 from datetime import datetime
 from os import listdir, path, scandir, stat
 from shutil import disk_usage
-
 from format import as_table
 from source import Source
 
@@ -24,7 +23,7 @@ class Storage(Source) :
         self._total = total
 
         self._free = free
-        self._spaces = {subDirectory : self.getsize(path.join(self._directory, subDirectory)) for subDirectory in listdir(self._directory) if self._is_valid_directory(subDirectory)}
+        self._spaces = {subDirectory : self._get_size(path.join(self._directory, subDirectory)) for subDirectory in listdir(self._directory) if self._is_valid_directory(subDirectory)}
 
     def _is_valid_directory(self, subDirectory: str) -> bool :
         return subDirectory != 'lost+found' and path.isdir(path.join(self._directory, subDirectory))
@@ -39,5 +38,5 @@ class Storage(Source) :
     def render(self) :
         size = [35, 35, 35]
         header = [["Name", "Percentage", "Size"]]
-        data = [[name, space / self._total, space] for name, space in self._spaces]
+        data = [[name, str(space / self._total), str(space)] for name, space in self._spaces.items()]
         return as_table(size, header + data)
