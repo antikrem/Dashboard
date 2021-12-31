@@ -1,13 +1,15 @@
 from datetime import datetime
 from os import listdir, path, scandir, stat
 from shutil import disk_usage
+from typing import Dict, Union
 from format import as_table, format_bytes
 from source import Source
 
 
 class Storage(Source) :
-    def __init__(self, directory : str) :
+    def __init__(self, directory : str, alias : Union[Dict[str, str], None]) :
         self._directory = directory
+        self._alias = alias
         self._spaces = {}
         self._total = 0
         self._free = 0
@@ -23,7 +25,15 @@ class Storage(Source) :
         self._total = total
 
         self._free = free
-        self._spaces = {subDirectory : self._get_size(path.join(self._directory, subDirectory)) for subDirectory in listdir(self._directory) if self._is_valid_directory(subDirectory)}
+        self._spaces = {
+            self._directory_name(subDirectory) : self._get_size(path.join(self._directory, subDirectory)) 
+            for subDirectory in listdir(self._directory) if self._is_valid_directory(subDirectory)
+        }
+
+    def _directory_name(self, subDirectory: str) :
+        if (self._alias is not None and subDirectory in self._alias) :
+            return self._alias[subDirectory]
+        return subDirectory
 
     def _is_valid_directory(self, subDirectory: str) -> bool :
         return subDirectory != 'lost+found' and path.isdir(path.join(self._directory, subDirectory))
