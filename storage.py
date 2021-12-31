@@ -32,14 +32,17 @@ class Storage(Source) :
     def _get_size(self, path: str) -> int :
         try:
             with scandir(path) as it:
-                return sum(self._get_size(entry) for entry in it)
+                sizes = [self._get_size(entry) for entry in it]
+                if (len(sizes) == 0) :
+                    return [0, 0]
+                return [sum(i) for i in zip(*sizes)]
         except NotADirectoryError:
-            return stat(path).st_size
+            return [stat(path).st_size, 1]
 
     def render(self) :
-        tableSize = [35, 35, 35]
-        header = [["Name", "Percentage", "Size"]]
-        total = [["Total", "--", size(self._total)]]
-        data = [[name, format(space / self._total,'.2%'), size(space)] for name, space in self._spaces.items()]
-        free = [["Free", format(self._free / self._total,'.2%'), size(self._free)]]
+        tableSize = [30, 30, 30, 30]
+        header = [["Name", "Percentage", "Size", "Files"]]
+        total = [["Total", "--", size(self._total), "--"]]
+        data = [[name, format(space[0] / self._total,'.2%'), size(space[0]), str(space[1])] for name, space in self._spaces.items()]
+        free = [["Free", format(self._free / self._total,'.2%'), size(self._free), "--"]]
         return as_table(tableSize, header + total + data + free)
