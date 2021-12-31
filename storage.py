@@ -3,6 +3,7 @@ from os import listdir, path, scandir, stat
 from shutil import disk_usage
 from format import as_table
 from source import Source
+from hurry.filesize import size
 
 
 class Storage(Source) :
@@ -36,7 +37,9 @@ class Storage(Source) :
             return stat(path).st_size
 
     def render(self) :
-        size = [35, 35, 35]
+        tableSize = [35, 35, 35]
         header = [["Name", "Percentage", "Size"]]
-        data = [[name, str(space / self._total), str(space)] for name, space in self._spaces.items()]
-        return as_table(size, header + data)
+        total = [["Total", "--", size(self._total)]]
+        data = [[name, format(space / self._total,'.2%'), size(space)] for name, space in self._spaces.items()]
+        free = [["Free", format(self._free / self._total,'.2%'), size(self._free)]]
+        return as_table(tableSize, header + total + data + free)
