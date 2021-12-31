@@ -27,7 +27,7 @@ class Packages(Source):
         data = [self._parse_row(v) for v in self._pakages.values() if v is not None]
         return as_table(size, header + data)
 
-    def _get_package(self, name: str) -> Tuple[str, str, str]:
+    def _get_package(self, name: str) -> Union[Tuple[str, str, str], None] :
         endpoint = f'https://api.nuget.org/v3/registration5-semver1/{name}/index.json'
 
         response = get(endpoint)
