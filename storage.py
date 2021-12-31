@@ -48,7 +48,12 @@ class Storage(Source) :
     def render(self) :
         tableSize = [30, 30, 30, 30]
         header = [["Name", "Used", "Size", "Files"]]
-        total = [["Total", "100.00%", format_bytes(self._total), "--"]]
+        total = [[
+                "Total",
+                "100.00%", 
+                format_bytes(self._total), 
+                str([sum(i) for i in zip(*self._spaces.values())][1])
+            ]]
         data = [self._make_row(name, space[0], space[1]) for name, space in self._spaces.items()]
         free = [["Free", format(self._free / self._total,'.2%'), format_bytes(self._free), "--"]]
         return as_table(tableSize, header + total + data + free)
