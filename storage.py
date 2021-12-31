@@ -16,7 +16,7 @@ class Storage(Source) :
         return "Storage"
 
     def period(self) :
-        return 60
+        return 360
 
     def update(self) :
         total, used, free = disk_usage(self._directory)
