@@ -1,5 +1,6 @@
 from packges import Packages
 from clock import Clock
+from storage import Storage
 
 from runner import Runner
 
