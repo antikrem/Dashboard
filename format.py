@@ -1,5 +1,21 @@
 from typing import List
 
+def format_bytes(bytes: float):
+    KB = float(1024)
+    MB = float(KB ** 2)
+    GB = float(KB ** 3)
+    TB = float(KB ** 4)
+
+    if bytes < KB:
+        return '{0} B'.format(bytes)
+    elif KB <= bytes < MB :
+        return '{0:.2f} KB'.format(bytes / KB)
+    elif MB <= bytes < GB :
+        return '{0:.2f} MB'.format(bytes / MB)
+    elif GB <= bytes < TB :
+        return '{0:.2f} GB'.format(bytes / GB)
+    elif TB <= bytes :
+        return '{0:.2f} TB'.format(bytes / TB)
 
 def canvas(width: int, height: int) -> str:
     return '\n'.join(height * [width * ' '])
