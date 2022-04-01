@@ -3,6 +3,7 @@ from os import system
 from multiprocessing import Process, Queue
 from datetime import datetime
 from time import sleep
+from traceback import format_exception
 
 
 class RunningSource() :
@@ -15,9 +16,14 @@ class RunningSource() :
         while True :
             start = datetime.now()
             
-            source.update()
-            output = source.render()
-            q.put(output)
+            try :
+                source.update()
+                output = source.render()
+                q.put(output)
+            except Exception as e :
+                with open('log.txt', 'a') as f :
+                    f.write(''.join(format_exception(e)))
+                
             
             taken = datetime.now() - start
             sleep(source.period() - taken.microseconds / 1000000.0)
