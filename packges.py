@@ -38,12 +38,6 @@ class Packages(Source):
 
         return [latestPackage['id'], latestPackage['published'], latestPackage['version']]
 
-    def _safe_get(endpoint: str) -> Union[Response, None] :
-        try :
-            return get(endpoint)
-        except :
-            return None
-
     def _parse_row(self, row) :
         published = parser.parse(row[1])
         offset = datetime.now().replace(tzinfo=timezone.utc)  - published
