@@ -1,5 +1,4 @@
-from datetime import datetime
-from os import listdir, path, scandir, stat
+from os import path, scandir, stat
 from shutil import disk_usage
 from typing import Dict, List, Union
 from format import as_table, format_bytes
