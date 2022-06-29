@@ -1,6 +1,8 @@
 from typing import List
+from numpy import number
+from math import ceil
 
-def format_bytes(bytes: float):
+def format_bytes(bytes: float) -> str :
     KB = float(1024)
     MB = float(KB ** 2)
     GB = float(KB ** 3)
@@ -17,13 +19,13 @@ def format_bytes(bytes: float):
     elif TB <= bytes :
         return '{0:.2f} TB'.format(bytes / TB)
 
-def canvas(width: int, height: int) -> str:
+def canvas(width: int, height: int) -> str :
     return '\n'.join(height * [width * ' '])
 
 def border(text: str) -> str :
     return 
 
-def pad_block(text: str, left: int, top: int, right: int, bottom: int) :
+def pad_block(text: str, left: int, top: int, right: int, bottom: int) -> str :
     return top * '\n' + '\n'.join([left * " " + line + right * " " for line in text.split('\n')]) + bottom * '\n'
 
 def as_table(size: List[int], data: List[List[any]]) -> str:
@@ -37,3 +39,8 @@ def as_table(size: List[int], data: List[List[any]]) -> str:
         output += '\n'
 
     return output
+
+def progress_bar(width: int, portion: number) -> str :
+    progress = ceil((width - 2) * portion)
+    blank = width - progress - 2
+    return '[' + progress * 'O' + blank * '-' + ']'
