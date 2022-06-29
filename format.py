@@ -44,3 +44,7 @@ def progress_bar(width: int, portion: number) -> str :
     progress = ceil((width - 2) * portion)
     blank = width - progress - 2
     return '[' + progress * 'O' + blank * '-' + ']'
+
+def four_character_percentage(portion: number) -> str :
+    value = str(ceil(portion * 100))
+    return (3 - len(value)) * ' ' + value + '%'
