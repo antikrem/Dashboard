@@ -26,7 +26,7 @@ class RunningSource() :
                 
             
             taken = datetime.now() - start
-            sleep(source.period() - taken.microseconds / 1000000.0)
+            sleep(max(source.period() - taken.microseconds / 1000000.0, 0))
 
     def start_process(self) :
         self._process = Process(target=RunningSource._loop, args=(self._queue, self._source))
