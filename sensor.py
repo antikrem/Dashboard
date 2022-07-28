@@ -37,7 +37,7 @@ class Sensor(Source):
         yield ' / '
         yield str(self._mem_usage.total)
         yield '\n'
-        totalMem = sum(self._mem_usage.used) / (100 * self._mem_usage.total)
+        totalMem = self._mem_usage.used / (100 * self._mem_usage.total)
         yield four_character_percentage(totalMem)
         yield ' '
         yield progress_bar(115 , totalMem * 100)
