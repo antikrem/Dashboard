@@ -4,6 +4,7 @@ from multiprocessing import Process, Queue
 from datetime import datetime
 from time import sleep
 from traceback import format_exception
+from sys import exc_info
 
 
 class RunningSource() :
@@ -22,7 +23,7 @@ class RunningSource() :
                 q.put(output)
             except Exception as e :
                 with open('log.txt', 'a') as f :
-                    f.write(''.join(format_exception(e)))
+                    f.write(''.join(format_exception(*exc_info())))
                 
             
             taken = datetime.now() - start
