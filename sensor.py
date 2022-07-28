@@ -19,7 +19,7 @@ class Sensor(Source):
 
     def cpu_progress_parts(self):
         
-        yield '\nCPU\n'
+        yield 'CPU\n'
         totalCPU = sum(self._cpu_usage) / (100 * len(self._cpu_usage))
         yield four_character_percentage(totalCPU)
         yield ' '
