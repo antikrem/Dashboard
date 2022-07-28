@@ -1,5 +1,5 @@
 from source import Source
-from psutil import cpu_percent
+from psutil import cpu_percent, virtual_memory
 from format import progress_bar, four_character_percentage
 
 class Sensor(Source):
@@ -12,15 +12,18 @@ class Sensor(Source):
 
     def update(self) :
         self._cpu_usage = cpu_percent(interval = None, percpu = True)
+        self._mem_usage = virtual_memory()
 
     def render(self) :
         return ''.join(self.cpu_progress_parts())
 
     def cpu_progress_parts(self):
-        total = sum(self._cpu_usage) / (100 * len(self._cpu_usage))
-        yield four_character_percentage(total)
+        
+        yield '\nCPU\n'
+        totalCPU = sum(self._cpu_usage) / (100 * len(self._cpu_usage))
+        yield four_character_percentage(totalCPU)
         yield ' '
-        yield progress_bar(115, total)
+        yield progress_bar(115, totalCPU)
         yield '\n'
 
         for i, usage in enumerate(self._cpu_usage) :
@@ -28,4 +31,18 @@ class Sensor(Source):
                 yield '\n'
 
             yield progress_bar(60, usage / 100)
+        
+        yield '\n\n\MEM: '
+        yield str(self._mem_usage.used)
+        yield ' / '
+        yield str(self._mem_usage.total)
+        yield '\n'
+        totalMem = sum(self._mem_usage.used) / (100 * self._mem_usage.total)
+        yield four_character_percentage(totalMem)
+        yield ' '
+        yield progress_bar(115 , totalMem * 100)
+
+
+
+
 
